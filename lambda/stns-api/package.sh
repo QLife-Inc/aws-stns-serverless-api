@@ -14,15 +14,15 @@ is_updated() {
   if [[ ! -e "${DIRNAME}/.checksum" ]]; then
     echo "Updated, because checksum file is not found" >&2
     echo ${checksum} > "${DIRNAME}/.checksum"
-    return 0
+    return 1
   fi
   if [[ ${checksum} == $(cat ${DIRNAME}/.checksum) ]]; then
     echo "Not updated, because checksum is not changed" >&2
-    return 1
+    return 0
   fi
   echo "Updated, because checksum is changed" >&2
   echo ${checksum} > "${DIRNAME}/.checksum"
-  return 0
+  return 1
 }
 
 re_install() {
