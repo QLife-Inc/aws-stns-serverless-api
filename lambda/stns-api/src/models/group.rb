@@ -17,8 +17,22 @@ class Group
     {
       name: name,
       id: id.to_i,
-      users: users || [],
-      link_groups: link_groups || [],
+      users: users_with_link_groups,
     }
+  end
+
+  private
+
+  def users_with_link_groups
+    @users_with_link_groups ||= ((users || []) + link_group_users).uniq
+  end
+
+  def link_group_users
+    return [] unless has_link_group?
+    link_groups.flat_map { |name| Group.find(name: name)&.users }.compact
+  end
+
+  def has_link_group?
+    !link_groups.nil? && !link_groups.empty?
   end
 end

@@ -23,12 +23,14 @@ before do
 end
 
 get '/users' do
+  logger.debug("params = #{params}")
   users = UserService.get_users(params, @authz_context)
   logger.debug(users.to_json)
   users.to_json
 end
 
 get '/groups' do
+  logger.debug("params = #{params}")
   groups = GroupService.get_groups(params, @authz_context)
   logger.debug(groups.to_json)
   groups.to_json

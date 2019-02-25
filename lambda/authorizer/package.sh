@@ -21,6 +21,7 @@ is_updated() {
     return 1
   fi
   echo "Updated, because checksum is changed" >&2
+  echo ${checksum} > "${DIRNAME}/.checksum"
   return 0
 }
 

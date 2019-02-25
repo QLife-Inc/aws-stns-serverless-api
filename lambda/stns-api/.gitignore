@@ -2,3 +2,6 @@ src/.bundle/
 src/vendor/
 *.zip
 .checksum
+vendor/
+.bundle/
+coverage/

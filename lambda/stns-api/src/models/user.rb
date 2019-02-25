@@ -27,9 +27,23 @@ class User
         directory: directory || "/home/#{name}",
         shell: shell || '/bin/bash',
         gecos: gecos || '',
-        keys: keys || [],
-        group_id: group_id&.to_i || '',
-        link_users: link_users || [],
+        keys: keys_with_link_users,
+        group_id: group_id&.to_i || ''
     }
+  end
+
+  private
+
+  def keys_with_link_users
+    @keys_with_link_users ||= ((keys || []) + link_user_keys).uniq
+  end
+
+  def link_user_keys
+    return [] unless has_link_user?
+    link_users.flat_map { |name| User.find(name: name)&.keys }.compact
+  end
+
+  def has_link_user?
+    !link_users.nil? && !link_users.empty?
   end
 end

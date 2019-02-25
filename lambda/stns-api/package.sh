@@ -4,8 +4,8 @@ DIRNAME=$( (cd $(dirname $0)/ && pwd) )
 SRCDIR="${DIRNAME}/src"
 
 source_checksum() {
-  cd "${SRCDIR}"
-  local check_sources="$(find . -name '*.rb' | grep -v vendor/) config.ru Gemfile Gemfile.lock"
+  cd "${DIRNAME}"
+  local check_sources="$(find src -name '*.rb' | grep -v vendor/) src/config.ru Gemfile"
   cat ${check_sources} | md5
 }
 
@@ -21,6 +21,7 @@ is_updated() {
     return 1
   fi
   echo "Updated, because checksum is changed" >&2
+  echo ${checksum} > "${DIRNAME}/.checksum"
   return 0
 }
 
