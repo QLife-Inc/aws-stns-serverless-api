@@ -26,7 +26,8 @@ is_updated() {
 }
 
 re_install() {
-  cd "${SRCDIR}"; rm -rf vendor
+  cd "${SRCDIR}"; rm -rf .bundle vendor
+  [[ ! -e Gemfile.lock ]] && bundle install --path vendor/bundle --without test 1>&2
   bundle install --deployment --path vendor/bundle --without test 1>&2
 }
 
