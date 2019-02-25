@@ -1,0 +1,12 @@
+source "https://rubygems.org"
+
+gem 'sinatra'
+gem 'rack-contrib'
+gem 'aws-record'
+
+group :test do
+  gem 'rake'
+  gem 'rspec'
+  gem 'simplecov'
+  gem 'simplecov-console'
+end

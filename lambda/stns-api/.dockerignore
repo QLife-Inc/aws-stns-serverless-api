@@ -1,0 +1,4 @@
+.checksum
+*.zip
+src/.bundle/
+src/vendor/
