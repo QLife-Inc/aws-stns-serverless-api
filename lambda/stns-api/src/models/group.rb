@@ -8,11 +8,17 @@ class Group
   string_attr :name, hash_key: true
   string_attr :id
   list_attr :users
+  list_attr :link_groups
   global_secondary_index :id_index,
                          hash_key: :id,
                          projection: { projection_type: 'ALL' }
 
   def to_h
-    { name: name, id: id.to_i, users: users || [] }
+    {
+      name: name,
+      id: id.to_i,
+      users: users || [],
+      link_groups: link_groups || [],
+    }
   end
 end

@@ -13,6 +13,7 @@ class User
   string_attr :gecos
   string_attr :group_id
   list_attr :keys
+  list_attr :link_users
   global_secondary_index :id_index,
                          hash_key: :id,
                          projection: { projection_type: 'ALL' }
@@ -27,7 +28,8 @@ class User
         shell: shell || '/bin/bash',
         gecos: gecos || '',
         keys: keys || [],
-        group_id: group_id&.to_i || 0
+        group_id: group_id&.to_i || '',
+        link_users: link_users || [],
     }
   end
 end
