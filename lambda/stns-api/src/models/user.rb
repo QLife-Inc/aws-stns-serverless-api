@@ -17,14 +17,15 @@ class User
                          hash_key: :id,
                          projection: { projection_type: 'ALL' }
 
+  # null があるとセグフォになるので、空文字に変換
   def to_h
     {
         name: name,
         id: id.to_i,
-        password: password,
+        password: password || '',
         directory: directory || "/home/#{name}",
         shell: shell || '/bin/bash',
-        gecos: gecos,
+        gecos: gecos || '',
         keys: keys || [],
         group_id: group_id&.to_i || 0
     }

@@ -1,7 +1,5 @@
 # Serverless STNS API Templates
 
-**！！注意: まだ API は動くけど認証はできません！！**
-
 サーバーレスな [STNS (Simple TOML Name Service)](https://stns.jp/) の API を AWS で構築するための Terraform テンプレートです。
 
 ユーザーリポジトリは `DynamoDB` で、バックエンドは `API Gateway` + `Lambda` で実装しています。
@@ -11,16 +9,17 @@
 * VPC 内からのアクセスを想定して Private API としてデプロイします。
 * サーバーごと (厳密には API Token ごと) に認証可能なアカウントを制御するため Custom Authorizer を利用します。
 
-## Disclaimer
+## Why not SAM ?
 
-* 最新版の `libnss-stns-v2` で **動きません** 。Segment Fault が発生します。こちらは原因調査中です。
-* 当初 SAM (Serverless Application Model) で実装していましたが、Private API 用の Hack が必要な点や、 STNS クライアントの都合（`X-API-TOKEN`ヘッダを使えない）により SAM を利用するのが困難だったため、Terraform のテンプレートにしています。SAM がもろもろ対応したら SAM に載せ替えます。
+当初 SAM (Serverless Application Model) で実装していましたが、Private API 用の Hack が必要な点や、 STNS クライアントの都合（`X-API-TOKEN`ヘッダを使えない）により SAM を利用するのが困難だったため、Terraform のテンプレートにしています。  
+SAM がもろもろ対応したら SAM に載せ替えます。
 
 ## Requirements / Setup
 
 * Ruby 2.5.0
 * terraform >= '0.11.10'
 * terraform-aws-provider >= '1.59.0'
+* find コマンド (Lambda ソースを一覧するために利用)
 * md5 コマンド (Lambda ソースの更新チェックに利用)
 * zip コマンド (Lambda ソースのアーカイブに利用)
 
@@ -31,7 +30,7 @@ provider "aws" {
 }
 
 module "stns" {
-  source "https://github.com/QLife-Inc/aws-stns-serverless-api.git"
+  source  = "https://github.com/QLife-Inc/aws-stns-serverless-api.git"
   api_key = "hogehoge"
   api_policy_json <<EOF
   {
@@ -71,6 +70,16 @@ EOF
 }
 ```
 
+`terraform apply` で API をデプロイすると、以下の出力が得られます。
+
+```
+Outputs:
+
+stns_api_url = https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/v2
+```
+
+上記 URL を `/etc/stns/client/stns.conf` の `api_endpoint` に指定してください。
+
 ## Parameters
 
 ### Required parameters
@@ -79,7 +88,7 @@ EOF
 
 内部で利用する API Gateway の API キーです。適当な英数字を設定してください。
 
-> API Key は Custom Authorizer から API Gateway に渡されるため、内部でしか利用されません(`X-API-TOKEN`ヘッダを利用しません)。これは、`libnss-stns-v2` から `X-API-TOKEN` ヘッダを渡せないための回避策で、`Authorization` ヘッダを Custom Authorizer で解析して API Key (固定値) を API Gateway に渡しています。  
+> API Key は Custom Authorizer から API Gateway に渡されるため、内部でしか利用されません(`X-API-TOKEN`ヘッダを利用しません)。これは、`libnss-stns-v2` から `X-API-TOKEN` ヘッダを渡せないための回避策で、`Authorization` ヘッダを Custom Authorizer で解析して API Key (固定値) を API Gateway に渡しています。  
 
 > そのため、本来であれば値を外部から渡す必要もないのですが、 Terraform で作成しようとしたら循環参照になってしまったため、外部から値を渡す必要があります。作成した API Key の値は Custom Authorizer によりセットされるため、クライアントから意識することはないです。  
 
@@ -161,9 +170,11 @@ DynamoDB の項目登録はサポートしていません。マネジメント
 
 STNS クライアントが送出する `Authorization` ヘッダに設定されるトークンに紐づく認可情報を格納するテーブルです（まだ適当です、すいません）。
 
-トークンごとに認可アカウントを絞り込む場合は `users` や `groups` に認可を与えるユーザー名、グループ名を指定します。
+このテーブルにある token を `/etc/stns/client/stns.conf` の `auth_token` に指定してください。指定したトークンによって認証可能なアカウントを振り分けます。
 
-`users` が 未設定, `null` もしくは空 `[]` の場合は `stns-users` テーブルのユーザーがすべてログイン可能となります。同様に、 `groups` が空の場合は `stns-groups` テーブルのグループがすべてログイン可能です。
+トークンごとに認可アカウントを絞り込む場合は `users` や `groups` に認可を与えるユーザー名、グループ名を指定します。
+
+`users` が 未設定, `null` もしくは空 `[]` の場合は `stns-users` テーブルのユーザーがすべてログイン可能となります。同様に、 `groups` が空の場合は `stns-groups` テーブルのグループがすべてログイン可能です。
 
 ```json
 {
