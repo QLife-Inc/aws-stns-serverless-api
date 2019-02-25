@@ -30,7 +30,7 @@ provider "aws" {
 }
 
 module "stns" {
-  source  = "https://github.com/QLife-Inc/aws-stns-serverless-api.git"
+  source  = "github.com/QLife-Inc/aws-stns-serverless-api"
   api_key = "hogehoge"
   api_policy_json <<EOF
   {

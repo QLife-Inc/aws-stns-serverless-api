@@ -5,7 +5,7 @@ SRCDIR="${DIRNAME}/src"
 
 source_checksum() {
   cd "${SRCDIR}"
-  local check_sources="$(find . -name '*.rb' | grep -v vendor) Gemfile Gemfile.lock"
+  local check_sources="$(find . -name '*.rb' | grep -v vendor) Gemfile"
   cat ${check_sources} | md5
 }
 

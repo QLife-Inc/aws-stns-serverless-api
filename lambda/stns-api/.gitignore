@@ -5,3 +5,4 @@ src/vendor/
 vendor/
 .bundle/
 coverage/
+Gemfile.lock
