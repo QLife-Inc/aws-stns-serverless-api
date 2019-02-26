@@ -22,13 +22,7 @@ resource aws_api_gateway_usage_plan "api" {
 }
 
 resource aws_api_gateway_api_key "api" {
-  name  = "${var.api_name}-api-key"
-  value = "${var.api_key}"
-
-  stage_key {
-    rest_api_id = "${aws_api_gateway_rest_api.api.id}"
-    stage_name  = "${aws_api_gateway_deployment.api.stage_name}"
-  }
+  name = "${var.api_name}-api-key"
 }
 
 resource aws_api_gateway_usage_plan_key "api" {

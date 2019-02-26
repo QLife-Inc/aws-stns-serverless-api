@@ -13,7 +13,7 @@ resource aws_lambda_function "authorizer" {
     variables = {
       API_ID     = "${aws_api_gateway_rest_api.api.id}"
       AUTH_TABLE = "${aws_dynamodb_table.stns_auth.id}"
-      API_KEY    = "${var.api_key}"
+      API_KEY    = "${aws_api_gateway_api_key.api.value}"
     }
   }
 }

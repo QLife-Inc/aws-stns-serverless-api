@@ -31,7 +31,6 @@ provider "aws" {
 
 module "stns" {
   source  = "github.com/QLife-Inc/aws-stns-serverless-api"
-  api_key = "hogehoge"
   api_policy_json <<EOF
   {
      "Version": "2012-10-17",
@@ -84,19 +83,9 @@ stns_api_url = https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/v2
 
 ### Required parameters
 
-#### api_key
+#### api_policy_json / api_policy_file
 
-内部で利用する API Gateway の API キーです。適当な英数字を設定してください。
-
-> API Key は Custom Authorizer から API Gateway に渡されるため、内部でしか利用されません(`X-API-TOKEN`ヘッダを利用しません)。これは、`libnss-stns-v2` から `X-API-TOKEN` ヘッダを渡せないための回避策で、`Authorization` ヘッダを Custom Authorizer で解析して API Key (固定値) を API Gateway に渡しています。  
-
-> そのため、本来であれば値を外部から渡す必要もないのですが、 Terraform で作成しようとしたら循環参照になってしまったため、外部から値を渡す必要があります。作成した API Key の値は Custom Authorizer によりセットされるため、クライアントから意識することはないです。  
-
-> そもそも API Key が必要なのか、というところですが、API Gateway の Private API は API Key がないとどうやっても 403 Forbidden になってしまったため、こうしています（なくても通るならやり方教えてください）。
-
-#### api_policy_file, api_policy_json
-
-`api_policy_file` か `api_policy_json` のいずれかを指定してください。 `api_policy_json` は API のリソースポリシーです。 `SourceVpc` や `SourceVpce` を利用して Private API にアクセスするための API リソースポリシーを JSON で指定します。  
+`api_policy_json` か `api_policy_file` のいずれかを指定してください。 `api_policy_json` は API のリソースポリシーです。 `SourceVpc` や `SourceVpce` を利用して Private API にアクセスするための API リソースポリシーを JSON で指定します。  
 `api_policy_file` は JSON ファイルへのパスです。どちらも指定しなかった場合、`terraform apply` 実行時にエラーになります。
 
 ### Optional parameters

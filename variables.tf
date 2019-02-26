@@ -7,8 +7,6 @@ variable api_name {
   default = "stns-api"
 }
 
-variable api_key {}
-
 variable stage_name {
   default = "v2"
 }
