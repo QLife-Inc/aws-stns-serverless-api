@@ -1,12 +1,8 @@
-locals {
-  resource_policy = "${var.api_policy_json != "" ? var.api_policy_json : var.api_policy_file != "" ? file(var.api_policy_file) : "INVALID" }"
-}
-
 resource aws_api_gateway_rest_api "api" {
   name           = "${var.api_name}"
   description    = "STNS Serverlss API"
   api_key_source = "AUTHORIZER"
-  policy         = "${local.resource_policy}"
+  policy         = "${var.api_policy_json}"
 
   endpoint_configuration {
     types = ["PRIVATE"]

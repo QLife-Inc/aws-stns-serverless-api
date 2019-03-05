@@ -4,6 +4,10 @@
 
 ユーザーリポジトリは `DynamoDB` で、バックエンドは `API Gateway` + `Lambda` で実装しています。
 
+紹介ブログはこちら。
+
+[サーバーレスでプライベートな STNS のバックエンド API を AWS で実現した話 - エムスリーテックブログ](https://www.m3tech.blog/entry/aws-private-stns-api)
+
 ## Concept
 
 * VPC 内からのアクセスを想定して Private API としてデプロイします。
@@ -55,7 +59,6 @@ module "stns" {
      ]
   }
 EOF
-  # api_policy_file = "/path/to/resource_policy.json"
   # api_name = "stns-api"
   # stage_name = "v2"
   # user_table_name = "stns-users"
@@ -83,10 +86,9 @@ stns_api_url = https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/v2
 
 ### Required parameters
 
-#### api_policy_json / api_policy_file
+#### api_policy_json
 
-`api_policy_json` か `api_policy_file` のいずれかを指定してください。 `api_policy_json` は API のリソースポリシーです。 `SourceVpc` や `SourceVpce` を利用して Private API にアクセスするための API リソースポリシーを JSON で指定します。  
-`api_policy_file` は JSON ファイルへのパスです。どちらも指定しなかった場合、`terraform apply` 実行時にエラーになります。
+`api_policy_json` は API のリソースポリシーです。 `SourceVpc` や `SourceVpce` を利用して Private API にアクセスするための API リソースポリシーを JSON で指定します。
 
 ### Optional parameters
 

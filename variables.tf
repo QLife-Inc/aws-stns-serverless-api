@@ -15,10 +15,6 @@ variable api_policy_json {
   default = ""
 }
 
-variable api_policy_file {
-  default = ""
-}
-
 variable user_table_name {
   default = "stns-users"
 }
