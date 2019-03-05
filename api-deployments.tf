@@ -8,8 +8,8 @@ resource aws_api_gateway_deployment "api" {
 
   rest_api_id       = "${aws_api_gateway_rest_api.api.id}"
   stage_name        = "${var.stage_name}"
-  stage_description = "Terraform hash ${md5("${file("${path.module}/api-resources.tf")}${local.resource_policy}")}"
-  description       = "Terraform hash ${md5("${file("${path.module}/api-resources.tf")}${local.resource_policy}")}"
+  stage_description = "Terraform hash ${md5("${file("${path.module}/api-resources.tf")}${var.api_policy_json}")}"
+  description       = "Terraform hash ${md5("${file("${path.module}/api-resources.tf")}${var.api_policy_json}")}"
 }
 
 resource aws_api_gateway_usage_plan "api" {
