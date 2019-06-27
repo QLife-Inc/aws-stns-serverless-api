@@ -1,32 +1,33 @@
-variable base_tags {
+variable "base_tags" {
   description = "Tag に設定するデフォルト値"
-  type        = "map"
+  type        = map(string)
 }
 
-variable api_name {
+variable "api_name" {
   default = "stns-api"
 }
 
-variable stage_name {
+variable "stage_name" {
   default = "v2"
 }
 
-variable api_policy_json {
+variable "api_policy_json" {
   default = ""
 }
 
-variable user_table_name {
+variable "user_table_name" {
   default = "stns-users"
 }
 
-variable group_table_name {
+variable "group_table_name" {
   default = "stns-groups"
 }
 
-variable auth_table_name {
+variable "auth_table_name" {
   default = "stns-authorizations"
 }
 
-variable log_retention_in_days {
+variable "log_retention_in_days" {
   default = 30
 }
+
