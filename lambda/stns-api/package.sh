@@ -10,6 +10,9 @@ source_checksum() {
 }
 
 is_updated() {
+  if [[ ! -e "${DIRNAME}/app.zip" ]]; then
+    return 0
+  fi
   local checksum=$(source_checksum)
   if [[ ! -e "${DIRNAME}/.checksum" ]]; then
     echo "Updated, because checksum file is not found" >&2
